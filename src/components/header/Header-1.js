@@ -31,7 +31,8 @@ const Header1 = () => {
                 </ul>
 
             </div>
-            <LanguageSelector/></div>
+            <LanguageSelector/>
+        </div>
 
     );
 };

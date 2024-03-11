@@ -21,21 +21,21 @@ const LanguageSelector = () => {
         setIsOpen(false);
     };
 
-    const handleClickOutside = useCallback((event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setIsOpen(false);
-            console.log('click outside');
-        }
-    }, []);
+        const handleClickOutside = useCallback((event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+                // console.log('click outside');
+            }
+        }, []);
 
-    useEffect(() => {
-        document.body.addEventListener('mousedown', handleClickOutside);
+        useEffect(() => {
+            document.body.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
-            document.body.removeEventListener('mousedown', handleClickOutside);
-            console.log('remove listener');
-        };
-    }, [handleClickOutside]);
+            return () => {
+                document.body.removeEventListener('mousedown', handleClickOutside);
+                console.log('remove listener');
+            };
+        }, [handleClickOutside]);
 
     return (
         <div className="flex items-center" ref={dropdownRef}>

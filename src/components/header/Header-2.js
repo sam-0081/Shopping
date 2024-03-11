@@ -1,5 +1,7 @@
 import React from 'react';
 import Logo from '../../img/icons/logo.png';
+import {Link} from "react-router-dom";
+import {ROUTES} from "../../utils/routes";
 
 const Header2 = () => {
 
@@ -7,9 +9,9 @@ const Header2 = () => {
         <>
             <div className="flex justify-between items-center py-4 gap-4">
                 <div className="flex-shrink-0">
-                    <a href="#" className="text-2xl ">
+                    <Link to={ROUTES.HOME} className="text-2xl ">
                         <img src={Logo} alt="Logo"/>
-                    </a>
+                    </Link>
                 </div>
 
                 <form className="w-3/5">
