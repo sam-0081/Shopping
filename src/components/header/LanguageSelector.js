@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect, useCallback} from 'react';
 
 import ru from '../../img/icons/flags/russia.png';
 import en from '../../img/icons/flags/england.png';
+import {useClickOutside} from "../../hooks/useClickOutside";
 
 const languages = {
     'Русский': ru,
@@ -12,6 +13,8 @@ const LanguageSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState('Русский');
     const dropdownRef = useRef(null);
+    useClickOutside(dropdownRef, () =>  setIsOpen(false))
+
 
     const toggleDropdown = () => {
         setIsOpen((prevIsOpen) => !prevIsOpen);
@@ -21,26 +24,11 @@ const LanguageSelector = () => {
         setIsOpen(false);
     };
 
-        const handleClickOutside = useCallback((event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-                // console.log('click outside');
-            }
-        }, []);
-
-        useEffect(() => {
-            document.body.addEventListener('mousedown', handleClickOutside);
-
-            return () => {
-                document.body.removeEventListener('mousedown', handleClickOutside);
-                console.log('remove listener');
-            };
-        }, [handleClickOutside]);
 
     return (
-        <div className="flex items-center" ref={dropdownRef}>
+        <div className="flex items-center">
 
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
 
                 <button
                     className="flex items-center focus:outline-none text-gray-600 hover:text-gray-800"
@@ -54,7 +42,7 @@ const LanguageSelector = () => {
                     </svg>
                 </button>
                 {isOpen && (
-                    <div className="absolute right-0 mt-2 w-32 bg-amber-50 rounded-md shadow-lg z-10">
+                    <div className="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-10">
                         <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                             {Object.keys(languages).map((language) => (
                                 <div key={language} className=" hover:bg-gray-100">

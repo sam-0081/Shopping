@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {NextArrow, PrevArrow} from "../common/CustomArrow";
 
-const Carousel = () => {
+const SingleImageCarousel = () => {
     const settings = {
         // className: "max-w-[814px] h-[416px]  rounded-2xl overflow-hidden",
          className: "w-2/3 h-[416px]  rounded-2xl overflow-hidden",
@@ -67,4 +67,4 @@ const Carousel = () => {
     );
 };
 
-export default Carousel;
+export default SingleImageCarousel;

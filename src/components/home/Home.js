@@ -1,11 +1,11 @@
 import React from 'react';
-import Carousel from "../carousel/Carousel";
-import Products from "../products/Products";
+import SingleImageCarousel from "../carousel/SingleImageCarousel";
+import Products from "../carousel/ProductImageCarousel";
 
 const Home = () => {
     return (
         <>
-            <Carousel/>
+            <SingleImageCarousel/>
             <Products/>
         </>
     );

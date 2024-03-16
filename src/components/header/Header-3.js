@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {NextArrow, PrevArrow} from "../common/CustomArrow";
 import {useDispatch, useSelector} from "react-redux";
-import {getCategories} from "../../features/categories/CategoriesSlice";
+import {getCategories} from "../../features/categories/categoriesSlice";
 import {Link} from "react-router-dom";
 import Menu from "./Menu";
 
