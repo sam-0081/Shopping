@@ -9,7 +9,6 @@ export const store =configureStore({
         products: productsSlice,
         // user: userSlise,
         [api.reducerPath]:api.reducer
-
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
     devTools: true,

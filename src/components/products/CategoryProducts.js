@@ -1,14 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useGetProductsByCategoryQuery} from "../../features/api/api";
 import Sidebar from "../sidebar/Sidebar";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
 import BannerCategory from "../sidebar/BannerCategory";
 
-const SingleCategory = () => {
+const CategoryProducts = () => {
 
     const {id} = useParams();
     const {data, isLoading, isFetching, isSuccess} = useGetProductsByCategoryQuery(id);
+    const [priceFilter, setPriceFilter] = useState({min: 0, max: 50000});
+
+    const handleFilterChange = (filter) => {
+        setPriceFilter(filter);
+    }
+
+    const filteredData = data?.filter((item) => {
+        console.log(priceFilter.min, priceFilter.max);
+        return item.price >=priceFilter.min && item.price <= priceFilter.max;
+    })
+
     return (
         <div className={'container mx-auto px-4 flex-row gap-4 '}>
             <Breadcrumb/>
@@ -16,8 +27,7 @@ const SingleCategory = () => {
             <div className={'flex gap-4'}>
                 <div className={'flex-col'}>
                     <BannerCategory/>
-
-                    <Sidebar/>
+                    <Sidebar handleFilterChange={handleFilterChange} />
                 </div>
 
 
@@ -25,7 +35,7 @@ const SingleCategory = () => {
 
                     {isLoading && <p>Loading...</p>}
                     {isFetching && <p>Fetching...</p>}
-                    {isSuccess && data.map(({id, images, title, price}) => (
+                    {isSuccess && filteredData.map(({id, images, title, price}) => (
                         <div key={id} className={"flex flex-grow"}>
                             <div
                                 className="flex-col  mb-4 w-[200px] flex-grow  h-[450px] bg-gray-300 rounded-xl overflow-hidden">
@@ -44,5 +54,5 @@ const SingleCategory = () => {
     );
 };
 
-export default SingleCategory
+export default CategoryProducts
 ;

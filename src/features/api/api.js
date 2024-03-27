@@ -4,7 +4,7 @@ import {BASE_URL} from "../../utils/constance";
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({baseUrl: BASE_URL}),
-    tagTypes: ['Products', 'Product', 'Categories', 'Category'],
+    tagTypes: ['Products', 'Product', 'Categories', 'Category','Users','User'],
     endpoints: (builder) => ({
         getProducts: builder.query({
             query: () => '/products',
@@ -71,7 +71,34 @@ export const api = createApi({
                 method: 'DELETE'
             }),
             invalidatesTags: ['Categories']
-        })
+        }),
+        getUser: builder.query({
+            query: (id) => `users/${id}`
+        }),
+        getUsers: builder.query({
+            query: () => `users`
+        }),
+        createUser: builder.mutation({
+            query: (body) => ({
+                url: `/users/`,
+                method: 'POST',
+                body
+            })
+        }),
+        updateUser: builder.mutation({
+            query: (body) => ({
+                url: `users`,
+                method: 'PUT',
+                body
+            })
+        }),
+        deleteUser: builder.mutation({
+            query: (id) => ({
+                url: `users/${id}`,
+                method: 'DELETE'
+            })
+        }),
+
     })
 })
 
@@ -86,5 +113,10 @@ export const {
     useDeleteProductMutation,
     useCreateCategoryMutation,
     useUpdateCategoryMutation,
-    useDeleteCategoryMutation
+    useDeleteCategoryMutation,
+    useGetUserQuery,
+    useGetUsersQuery,
+    useCreateUserMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation,
 } = api;
