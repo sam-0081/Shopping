@@ -1,9 +1,47 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {BASE_URL} from "../../utils/constance";
+import {logOut, setCredentials} from "../authSlice/authSlice";
+
+const baseQuery = fetchBaseQuery({
+    baseUrl: BASE_URL,
+    prepareHeaders: (headers, { getState }) => {
+        const token = getState().auth.token;
+        console.log(token)
+        if (token) {
+            headers.set('authorization', `Bearer ${token}`);
+        }
+        return headers;
+    },
+});
+
+// Создаем экземпляр baseQueryWithReauth
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+    let result = await baseQuery(args, api, extraOptions);
+
+    // Если получен статус 401 (Unauthorized), пытаемся обновить токен
+    if (result.error && result.error.status === 401) {
+        const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions);
+
+        // Если обновление токена прошло успешно
+        if (refreshResult.data) {
+            const user = api.getState().auth.user;
+            // Обновляем токен в хранилище состояния
+            api.dispatch(setCredentials({ ...refreshResult.data, user }));
+
+            // Повторяем исходный запрос с новым токеном
+            result = await baseQuery(args, api, extraOptions);
+        } else {
+            // Если обновление токена не удалось, выходим из системы
+            api.dispatch(logOut());
+        }
+    }
+
+    return result;
+};
 
 export const api = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({baseUrl: BASE_URL}),
+    baseQuery: baseQueryWithReauth,
     tagTypes: ['Products', 'Product', 'Categories', 'Category','Users','User'],
     endpoints: (builder) => ({
         getProducts: builder.query({
@@ -98,6 +136,13 @@ export const api = createApi({
                 method: 'DELETE'
             })
         }),
+        login: builder.mutation({
+            query: (body) => ({
+                url: `/auth/login`,
+                method: 'POST',
+                body: body
+            })
+        }),
 
     })
 })
@@ -119,4 +164,5 @@ export const {
     useCreateUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
+    useLoginMutation
 } = api;

@@ -35,7 +35,8 @@ const Header2 = () => {
                 </form>
 
                 <div className="relative block cursor-pointer">
-                    <Link to={ROUTES.AUTHORIZATION} className="bg-orange-500 w-32 h-12 rounded-2xl text-white p-3 pr-8">Профиль
+                    <Link to={ROUTES.AUTHORIZATION}
+                          className="bg-orange-500 hover:bg-orange-600 w-32 h-12 rounded-2xl text-white p-3 pr-8">Профиль
                     </Link>
                     <span className="absolute inset-y-0 right-0 flex items-center px-3 ">
                                     <svg className="h-6 w-6 fill-white">
@@ -55,8 +56,8 @@ const Header2 = () => {
                                 </span>
                 </div>
 
-                <div className="relative block cursor-pointer">
-                    <button className="bg-orange-500 w-12 h-12 rounded-2xl text-white p-3 pr-8">
+                <div className="relative block cursor-pointer ">
+                    <button className="bg-orange-500   w-12 h-12 rounded-2xl text-white p-3 pr-8">
                     </button>
                     <span className="absolute inset-y-0  flex items-center px-3">
                                     <svg className="h-6 w-6 fill-white">

@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.input-custom{
+.input-custom {
     @apply mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
     focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400
     disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
@@ -14,22 +14,32 @@
     focus:invalid:border-red-500 focus:invalid:ring-red-500
 }
 
+.input-invalid {
+    @apply border-red-500 text-red-600
+    focus:border-red-500 focus:ring-red-500
+}
+
 @layer base {
     h1 {
         @apply text-3xl;
     }
+
     h2 {
         @apply text-2xl;
     }
+
     h3 {
         @apply text-lg;
     }
+
     h4 {
         @apply text-base;
     }
+
     h5 {
         @apply text-sm;
     }
+
     h6 {
         @apply text-xs;
     }
