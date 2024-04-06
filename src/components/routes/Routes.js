@@ -6,6 +6,7 @@ import {ROUTES} from "../../utils/routes";
 import CategoryProducts from "../products/CategoryProducts";
 import UserSignupForm from "../user/UserSignupForm";
 import UserLogin from "../user/UserLogin";
+import UserProfile from "../user/UserProfile";
 
 const AppRoutes = () => {
     return (
@@ -14,6 +15,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.CATEGORY} element={<CategoryProducts />} />
             <Route path={ROUTES.AUTHORIZATION} element={<UserSignupForm />} />
             <Route path={ROUTES.LOGIN} element={<UserLogin />} />
+            <Route path={ROUTES.PROFILE} element={<UserProfile />} />
 
         </Routes>
     );

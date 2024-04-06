@@ -2,8 +2,12 @@ import React from 'react';
 import Logo from '../../img/icons/logo.png';
 import {Link} from "react-router-dom";
 import {ROUTES} from "../../utils/routes";
+import {useSelector} from "react-redux";
+import {selectIsAuthenticated} from "../../features/authSlice/authSlice";
 
 const Header2 = () => {
+    const isAuthenticated = useSelector(selectIsAuthenticated);
+
 
     return (
         <>
@@ -35,8 +39,11 @@ const Header2 = () => {
                 </form>
 
                 <div className="relative block cursor-pointer">
-                    <Link to={ROUTES.AUTHORIZATION}
-                          className="bg-orange-500 hover:bg-orange-600 w-32 h-12 rounded-2xl text-white p-3 pr-8">Профиль
+
+                    <Link to={isAuthenticated ? ROUTES.PROFILE : ROUTES.LOGIN}
+                          className="bg-orange-500 hover:bg-orange-600 w-32 h-12 rounded-2xl text-white p-3 pr-8">
+                        {isAuthenticated ? 'Профиль' : 'Войти'}
+                        {/*Профиль*/}
                     </Link>
                     <span className="absolute inset-y-0 right-0 flex items-center px-3 ">
                                     <svg className="h-6 w-6 fill-white">

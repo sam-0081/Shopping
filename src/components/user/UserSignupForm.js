@@ -4,6 +4,8 @@ import {ROUTES} from "../../utils/routes";
 import {useCreateUserMutation} from "../../features/api/api";
 import {useForm} from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
+import {useSelector} from "react-redux";
+import authSlice, {selectIsAuthenticated} from "../../features/authSlice/authSlice";
 
 const UserSignupForm = () => {
     const [createUser] = useCreateUserMutation();
@@ -18,6 +20,7 @@ const UserSignupForm = () => {
         clearErrors
     } = useForm({
         criteriaMode: "all", mode: "onChange"
+
     });
 
 

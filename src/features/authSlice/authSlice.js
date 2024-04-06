@@ -1,24 +1,78 @@
-import React from 'react';
 import {createSlice} from "@reduxjs/toolkit";
+import {api} from "../api/api";
+
+
+const restoreAuthState = () => {
+
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+
+
+    if (accessToken && refreshToken) {
+        return {
+            accessToken,
+            refreshToken,
+            // Здесь вы можете восстановить данные пользователя из localStorage, если они были сохранены
+        };
+    }
+
+    return null;
+};
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
+        accessToken: null,
+        refreshToken: null,
         user: null,
-        token: null,
+        ...restoreAuthState(),
     },
     reducers: {
         setCredentials: (state, action) => {
+            // const {accessToken, refreshToken, user} = action.payload;
+            state.accessToken = action.payload.access_token;
+            state.refreshToken = action.payload.refresh_token;
             state.user = action.payload.user;
-            state.token = action.payload.access_token;
+            localStorage.setItem('accessToken', action.payload.access_token);
+            localStorage.setItem('refreshToken', action.payload.refresh_token);
         },
         logOut: (state) => {
+            state.accessToken = null;
+            state.refreshToken = null;
             state.user = null;
-            state.token = null;
-        }
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+        },
+        setUser: (state, action) => {
+            state.user = action.payload;
+        },
+    },
+    extraReducers: (builder)=>{
+        builder.addMatcher(api.endpoints.login.matchFulfilled, (state, {payload}) => {
+            const {access_token, refresh_token} = payload;
+            state.accessToken = access_token;
+            state.refreshToken = refresh_token;
+            localStorage.setItem('accessToken', access_token);
+            localStorage.setItem('refreshToken', refresh_token);
+
+        });
+        builder.addMatcher(api.endpoints.profile.matchFulfilled, (state, {payload}) => {
+            state.user = payload;
+        });
+        builder.addMatcher(api.endpoints.refreshToken.matchFulfilled, (state, {payload}) => {
+            state.accessToken = payload.access_token;
+            state.refreshToken = payload.refresh_token;
+            localStorage.setItem('accessToken', payload.access_token);
+            localStorage.setItem('refreshToken', payload.refresh_token);
+
+        });
+
     }
 });
 
-export const {setCredentials, logOut} = authSlice.actions;
+export const {setCredentials, logOut, setUser} = authSlice.actions;
 
 export default authSlice.reducer;
+
+export const selectIsAuthenticated = (state) => !!state.auth.accessToken;

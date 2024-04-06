@@ -1,37 +1,36 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {BASE_URL} from "../../utils/constance";
+import {API_ROUTES, BASE_URL} from "../../utils/constance";
 import {logOut, setCredentials} from "../authSlice/authSlice";
 
 const baseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
+
     prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.token;
-        console.log(token)
-        if (token) {
-            headers.set('authorization', `Bearer ${token}`);
+        const { auth } = getState();
+        if (auth.accessToken) {
+            headers.set('Authorization', `Bearer ${auth.accessToken}`);
+            // console.log(headers.get('Authorization'))
         }
+
         return headers;
     },
 });
 
-// Создаем экземпляр baseQueryWithReauth
-const baseQueryWithReauth = async (args, api, extraOptions) => {
+const baseQueryWithRefreshToken = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
 
-    // Если получен статус 401 (Unauthorized), пытаемся обновить токен
     if (result.error && result.error.status === 401) {
+        // Попытка обновить токен доступа с помощью токена обновления
         const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions);
 
-        // Если обновление токена прошло успешно
         if (refreshResult.data) {
-            const user = api.getState().auth.user;
-            // Обновляем токен в хранилище состояния
-            api.dispatch(setCredentials({ ...refreshResult.data, user }));
+            const { user } = api.getState().auth.user;
+            api.dispatch(setCredentials(refreshResult.data, user));
 
-            // Повторяем исходный запрос с новым токеном
+            // Повторить запрос с новым токеном доступа
             result = await baseQuery(args, api, extraOptions);
         } else {
-            // Если обновление токена не удалось, выходим из системы
+            // Обработка ошибки обновления токена
             api.dispatch(logOut());
         }
     }
@@ -39,34 +38,61 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     return result;
 };
 
+
+
+// Создаем экземпляр baseQueryWithReauth
+// const baseQueryWithReauth = async (args, api, extraOptions) => {
+//     let result = await baseQuery(args, api, extraOptions);
+//
+//     // Если получен статус 401 (Unauthorized), пытаемся обновить токен
+//     if (result.error && result.error.status === 401) {
+//         const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions);
+//
+//         // Если обновление токена прошло успешно
+//         if (refreshResult.data) {
+//             const user = api.getState().auth.user;
+//             // Обновляем токен в хранилище состояния
+//             api.dispatch(setCredentials({ ...refreshResult.data, user }));
+//
+//             // Повторяем исходный запрос с новым токеном
+//             result = await baseQuery(args, api, extraOptions);
+//         } else {
+//             // Если обновление токена не удалось, выходим из системы
+//             api.dispatch(logOut());
+//         }
+//     }
+//
+//     return result;
+// };
+
 export const api = createApi({
     reducerPath: 'api',
-    baseQuery: baseQueryWithReauth,
+    baseQuery: baseQueryWithRefreshToken,
     tagTypes: ['Products', 'Product', 'Categories', 'Category','Users','User'],
     endpoints: (builder) => ({
         getProducts: builder.query({
-            query: () => '/products',
+            query: () => API_ROUTES.PRODUCTS,
             providesTags: ['Products']
         }),
         getProductsByCategory: builder.query({
-            query: (id) => `/categories/${id}/products`,
+            query: (id) => API_ROUTES.PRODUCT_BY_CATEGORY(id),
             providesTags: ['Products']
         }),
         getProduct: builder.query({
-            query: (id) => `/products/${id}`,
+            query: (id) => API_ROUTES.PRODUCT(id),
             providesTags: ['Product']
         }),
         getCategories: builder.query({
-            query: () => '/categories',
+            query: () => API_ROUTES.CATEGORIES,
             providesTags: ['Categories']
         }),
         getCategory: builder.query({
-            query: (id) => `/categories/${id}`,
+            query: (id) => API_ROUTES.CATEGORY(id),
             providesTags: ['Category']
         }),
         createProduct: builder.mutation({
             query: (body) => ({
-                url: '/products',
+                url: API_ROUTES.PRODUCTS,
                 method: 'POST',
                 body
             }),
@@ -74,7 +100,7 @@ export const api = createApi({
         }),
         updateProduct: builder.mutation({
             query: (body) => ({
-                url: '/products',
+                url: API_ROUTES.PRODUCTS,
                 method: 'PUT',
                 body
             }),
@@ -82,14 +108,14 @@ export const api = createApi({
         }),
         deleteProduct: builder.mutation({
             query: (id) => ({
-                url: `/products/${id}`,
+                url: API_ROUTES.PRODUCT(id),
                 method: 'DELETE'
             }),
             invalidatesTags: ['Products']
         }),
         createCategory: builder.mutation({
             query: (body) => ({
-                url: '/categories',
+                url: API_ROUTES.CATEGORIES,
                 method: 'POST',
                 body
             }),
@@ -97,7 +123,7 @@ export const api = createApi({
         }),
         updateCategory: builder.mutation({
             query: (body) => ({
-                url: '/categories',
+                url: API_ROUTES.CATEGORIES,
                 method: 'PUT',
                 body
             }),
@@ -105,43 +131,55 @@ export const api = createApi({
         }),
         deleteCategory: builder.mutation({
             query: (id) => ({
-                url: `/categories/${id}`,
+                url: API_ROUTES.CATEGORY(id),
                 method: 'DELETE'
             }),
             invalidatesTags: ['Categories']
         }),
         getUser: builder.query({
-            query: (id) => `users/${id}`
+            query: (id) => API_ROUTES.USER(id),
         }),
         getUsers: builder.query({
-            query: () => `users`
+            query: () => API_ROUTES.USERS,
         }),
         createUser: builder.mutation({
             query: (body) => ({
-                url: `/users/`,
+                url: API_ROUTES.USERS,
                 method: 'POST',
                 body
             })
         }),
         updateUser: builder.mutation({
             query: (body) => ({
-                url: `users`,
+                url: API_ROUTES.USERS,
                 method: 'PUT',
                 body
             })
         }),
         deleteUser: builder.mutation({
             query: (id) => ({
-                url: `users/${id}`,
+                url: API_ROUTES.USER(id),
                 method: 'DELETE'
             })
         }),
         login: builder.mutation({
-            query: (body) => ({
-                url: `/auth/login`,
+            query: (credentials) => ({
+                url: API_ROUTES.LOGIN,
                 method: 'POST',
-                body: body
-            })
+                body: credentials,
+            }),
+        }),
+        profile: builder.query({
+            query: () => API_ROUTES.PROFILE,
+            // refetchOnMountOrArgChange: true, // Всегда получать свежие данные профиля
+            // skip: (state) => !state.refreshToken, // Пропускать запрос, если токена нет
+        }),
+        refreshToken: builder.mutation({
+            query: (refreshToken) => ({
+                url: API_ROUTES.REFRESH_TOKEN,
+                method: 'POST',
+                body: { refreshToken },
+            }),
         }),
 
     })
@@ -164,5 +202,7 @@ export const {
     useCreateUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
-    useLoginMutation
+    useLoginMutation,
+    useProfileQuery,
+    useRefreshTokenMutation
 } = api;

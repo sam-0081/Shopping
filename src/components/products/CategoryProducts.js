@@ -16,7 +16,7 @@ const CategoryProducts = () => {
     }
 
     const filteredData = data?.filter((item) => {
-        console.log(priceFilter.min, priceFilter.max);
+        // console.log(priceFilter.min, priceFilter.max);
         return item.price >=priceFilter.min && item.price <= priceFilter.max;
     })
 

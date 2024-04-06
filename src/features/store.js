@@ -3,6 +3,7 @@ import categoriesSlice from "./categories/categoriesSlice";
 import productsSlice from "./products/productsSlice";
 import {api} from "./api/api";
 import authSlice from "./authSlice/authSlice";
+import {setupListeners} from "@reduxjs/toolkit/query";
 
 export const store =configureStore({
     reducer: {
@@ -15,3 +16,6 @@ export const store =configureStore({
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
     devTools: true,
 })
+
+setupListeners(store.dispatch);
+
