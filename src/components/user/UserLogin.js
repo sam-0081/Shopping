@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ROUTES} from "../../utils/routes";
 import {useForm} from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
@@ -11,6 +11,7 @@ import {selectIsAuthenticated} from "../../features/authSlice/authSlice";
 const UserLogin = () => {
     const [login, {isLoading: isLoginLoading}] = useLoginMutation();
     const isAuthenticated = useSelector(selectIsAuthenticated);
+    const navigate = useNavigate();
 
 
     const {
@@ -26,6 +27,8 @@ const UserLogin = () => {
 
         try {
             const result = await login(data).unwrap();
+            navigate(ROUTES.HOME)
+
             // const {access_token} = result;
             // setAccessToken(access_token);
             // dispatch(setCredentials({...result, user}));

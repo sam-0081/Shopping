@@ -13,8 +13,8 @@ const SingleImageCarousel = () => {
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        nextArrow: <PrevArrow posX={"left-[20px]"}/>,
-        prevArrow: <NextArrow posX={"right-[20px]"}/>,
+        nextArrow: <NextArrow posX={"right-[20px]"}/>,
+        prevArrow: <PrevArrow posX={"left-[20px]"}/>,
         appendDots: dots => (
             <div
                 style={{

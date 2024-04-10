@@ -7,16 +7,24 @@ import CategoryProducts from "../products/CategoryProducts";
 import UserSignupForm from "../user/UserSignupForm";
 import UserLogin from "../user/UserLogin";
 import UserProfile from "../user/UserProfile";
+import SingleProduct from "../products/SingleProduct";
+import Cart from "../cart/Cart";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
     return (
         <Routes>
             <Route index element={<Home/>}></Route>
-            <Route path={ROUTES.CATEGORY} element={<CategoryProducts />} />
-            <Route path={ROUTES.AUTHORIZATION} element={<UserSignupForm />} />
-            <Route path={ROUTES.LOGIN} element={<UserLogin />} />
-            <Route path={ROUTES.PROFILE} element={<UserProfile />} />
-
+            <Route path={ROUTES.CATEGORY} element={<CategoryProducts/>}/>
+            <Route path={ROUTES.AUTHORIZATION} element={<UserSignupForm/>}/>
+            <Route path={ROUTES.LOGIN} element={<UserLogin/>}/>
+            <Route path={ROUTES.PROFILE} element={<UserProfile/>}/>
+            <Route path={ROUTES.PRODUCT} element={<SingleProduct/>}/>
+            <Route path={ROUTES.CART} element={
+                <ProtectedRoute>
+                    <Cart/>
+                </ProtectedRoute>
+            }/>
         </Routes>
     );
 };

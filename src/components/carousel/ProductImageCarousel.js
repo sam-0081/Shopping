@@ -23,8 +23,8 @@ const Products = () => {
         slidesToShow: 4,
         slidesToScroll: 3,
         variableWidth: false,
-        nextArrow: <PrevArrow posX={"right-[50px]"} posY={"top-[-20px]"}/>,
-        prevArrow: <NextArrow posX={"right-[0px]"} posY={"top-[-20px]"}/>,
+        nextArrow: <NextArrow posX={"right-[0px]"} posY={"top-[-20px]"}/>,
+        prevArrow: <PrevArrow posX={"right-[50px]"} posY={"top-[-20px]"}/>,
 
 
     };

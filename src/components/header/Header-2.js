@@ -3,10 +3,13 @@ import Logo from '../../img/icons/logo.png';
 import {Link} from "react-router-dom";
 import {ROUTES} from "../../utils/routes";
 import {useSelector} from "react-redux";
+import {PiHandbagSimpleLight} from "react-icons/pi";
 import {selectIsAuthenticated} from "../../features/authSlice/authSlice";
 
 const Header2 = () => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
+    const cart = useSelector((state) => state.auth.cart);
+
 
 
     return (
@@ -41,7 +44,7 @@ const Header2 = () => {
                 <div className="relative block cursor-pointer">
 
                     <Link to={isAuthenticated ? ROUTES.PROFILE : ROUTES.LOGIN}
-                          className="bg-orange-500 hover:bg-orange-600 w-32 h-12 rounded-2xl text-white p-3 pr-8">
+                          className="bg-orange-500 hover:bg-orange-600 w-32 h-12 rounded-2xl text-white p-3 pr-10">
                         {isAuthenticated ? 'Профиль' : 'Войти'}
                         {/*Профиль*/}
                     </Link>
@@ -63,15 +66,22 @@ const Header2 = () => {
                                 </span>
                 </div>
 
-                <div className="relative block cursor-pointer ">
+                <Link to={ROUTES.CART} className="relative block cursor-pointer ">
                     <button className="bg-orange-500   w-12 h-12 rounded-2xl text-white p-3 pr-8">
                     </button>
                     <span className="absolute inset-y-0  flex items-center px-3">
                                     <svg className="h-6 w-6 fill-white">
                                         <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#bag`}/>
                                     </svg>
-                                </span>
-                </div>
+                    </span>
+                    {cart.length > 0 &&
+                        <span
+                            className="absolute  text-center text-xs leading-none inset-y-0 right-1 top-6 border-0 rounded-full  bg-emerald-500 text-white font-bold flex items-center justify-center  w-[18px] h-[18px] z-30">
+                        {cart.length}
+                    </span>
+                    }
+
+                </Link>
 
             </div>
         </>

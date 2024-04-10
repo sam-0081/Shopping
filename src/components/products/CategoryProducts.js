@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useGetProductsByCategoryQuery} from "../../features/api/api";
 import Sidebar from "../sidebar/Sidebar";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
 import BannerCategory from "../sidebar/BannerCategory";
+import {API_ROUTES} from "../../utils/constance";
 
 const CategoryProducts = () => {
 
@@ -37,14 +38,14 @@ const CategoryProducts = () => {
                     {isFetching && <p>Fetching...</p>}
                     {isSuccess && filteredData.map(({id, images, title, price}) => (
                         <div key={id} className={"flex flex-grow"}>
-                            <div
+                            <Link to={API_ROUTES.PRODUCT(id)}
                                 className="flex-col  mb-4 w-[200px] flex-grow  h-[450px] bg-gray-300 rounded-xl overflow-hidden">
                                 <img src={images[0]} alt="product" className="w-full h-72 object-cover"/>
                                 <div className="p-2 ">
                                     <h3 className="text-lg font-bold">{title}</h3>
                                     <p className="text-gray-500 z-20">{`Цена ${price}$`}</p>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                     ))}
                 </div>

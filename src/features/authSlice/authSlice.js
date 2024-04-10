@@ -7,8 +7,6 @@ const restoreAuthState = () => {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
-
-
     if (accessToken && refreshToken) {
         return {
             accessToken,
@@ -26,6 +24,7 @@ const authSlice = createSlice({
         accessToken: null,
         refreshToken: null,
         user: null,
+        cart: [],
         ...restoreAuthState(),
     },
     reducers: {
@@ -47,6 +46,25 @@ const authSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload;
         },
+        addToCart: (state, {payload}) => {
+            if (state.cart.find((item) => item.id === payload.id)) {
+                state.cart = state.cart.map((item) => {
+                    if (item.id === payload.id) {
+                        return {...item, quantity: payload.quantity || item.quantity + 1};
+                    }
+                    return item;
+                });
+                return;
+            }
+            state.cart.push({...payload, quantity: 1});
+        },
+        removeFromCart: (state, action) => {
+            state.cart = state.cart.filter((item) => item.id !== action.payload.id);
+        },
+        clearCart: (state) => {
+            state.cart = [];
+        },
+
     },
     extraReducers: (builder)=>{
         builder.addMatcher(api.endpoints.login.matchFulfilled, (state, {payload}) => {
@@ -71,8 +89,17 @@ const authSlice = createSlice({
     }
 });
 
-export const {setCredentials, logOut, setUser} = authSlice.actions;
+export const
+    {
+    setCredentials,
+    logOut,
+    setUser,
+    addToCart,
+    removeFromCart,
+    clearCart
+} = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectIsAuthenticated = (state) => !!state.auth.accessToken;
+// export const selectIsAuthenticated = (state) => !!state.auth.accessToken;
+export const selectIsAuthenticated = (state) => state && state.auth ? !!state.auth.accessToken : false;
