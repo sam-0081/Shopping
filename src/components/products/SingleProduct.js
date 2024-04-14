@@ -39,7 +39,7 @@ const SingleProduct = () => {
                                     {data.images.map((image, index) => (
                                         <img onClick={() => handleImageChange(index)} key={index} src={image}
                                              alt="product"
-                                             className={`w-20 h-20 min-w-20 min-h-20 mb-4 object-cover cursor-pointer hover:brightness-125 rounded  ${selectedImageIndex === index ? "border-2 border-orange-500 drop-shadow-2xl brightness-125  " : ""}`}/>
+                                             className={`w-20 h-20 min-w-20 min-h-20 mb-4 object-cover cursor-pointer hover:brightness-125 active:brightness-150 rounded  ${selectedImageIndex === index ? "border-2 border-orange-500 drop-shadow-2xl brightness-125  " : ""}`}/>
                                     ))}
                                 </div>
                             </div>
@@ -56,11 +56,11 @@ const SingleProduct = () => {
                                 <div className={'flex flex-wrap gap-4 '}>
                                     <button type={"button"}
                                             onClick={() => handleAddToCart(data)}
-                                            className="flex justify-center whitespace-nowrap bg-emerald-500 hover:bg-emerald-600   p-2 px-6 rounded-2xl text-slate-900 text-lg">
+                                            className="flex justify-center whitespace-nowrap bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700  p-2 px-6 rounded-2xl text-slate-900 text-lg">
                                         Добавить в Карзину
                                     </button>
                                     <button type={"button"}
-                                            className="flex justify-center whitespace-nowrap  bg-orange-500 hover:bg-orange-600   p-2 px-6 rounded-2xl text-white text-lg">
+                                            className="flex justify-center whitespace-nowrap  bg-orange-500 hover:bg-orange-600 active:bg-orange-700  p-2 px-6 rounded-2xl text-white text-lg">
                                         Добавить в Избранное
                                     </button>
                                 </div>

@@ -3,7 +3,8 @@ import {NextArrow, PrevArrow} from "../common/CustomArrow";
 import Slider from "react-slick";
 import {useDispatch, useSelector} from "react-redux";
 import {getProducts} from "../../features/products/productsSlice";
-import {BASE_URL} from "../../utils/constance";
+import {API_ROUTES, BASE_URL} from "../../utils/constance";
+import {Link} from "react-router-dom";
 
 const Products = () => {
 
@@ -39,14 +40,16 @@ const Products = () => {
                         products.map(({id, images, price, title}) => (
                         <div key={id} className={"flex"}>
                             <div className=" mr-3 max-w-80 h-96 bg-gray-300 rounded-xl overflow-hidden">
-                                <img src={images[0]} alt="product" className="w-full h-72 object-cover"/>
-                                <div className="p-2">
-                                    <h3 className="text-lg font-bold">{title}</h3>
-                                    <p className="text-gray-500">{`Цена ${price}$`}</p>
-                                </div>
+                                <Link to={API_ROUTES.PRODUCT(id)}><img src={images[0]} alt="product" className="w-full h-72 object-cover"/>
+                                    <div className="p-2">
+                                        <h3 className="text-lg font-bold">{title}</h3>
+                                        <p className="text-gray-500">{`Цена ${price}$`}</p>
+                                    </div>
+                                </Link>
                             </div>
                         </div>
                     ))}
+
                 </Slider>
             </div>
         </div>
